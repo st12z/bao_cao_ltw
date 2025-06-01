@@ -1,0 +1,31 @@
+"use strict";
+
+var mongoose = require("mongoose");
+
+var userSchema = new mongoose.Schema({
+  first_name: {
+    type: String
+  },
+  last_name: {
+    type: String
+  },
+  location: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  occupation: {
+    type: String
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
+});
+module.exports = mongoose.model.Users || mongoose.model("Users", userSchema);
