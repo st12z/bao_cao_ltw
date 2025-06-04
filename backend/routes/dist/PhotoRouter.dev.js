@@ -78,6 +78,8 @@ router.get("/photosOfUser/:id", verifyToken, function _callee2(request, response
           _context2.next = 4;
           return regeneratorRuntime.awrap(Photo.find({
             user_id: id
+          }).sort({
+            date_time: -1
           }));
 
         case 4:
@@ -96,7 +98,7 @@ router.get("/photosOfUser/:id", verifyToken, function _callee2(request, response
           if (photos.length > 0) {
             photos.forEach(function (photo) {
               if (photo.comments.length > 0) {
-                photo.comments = photo.comments.sort(function (a, b) {
+                photo.comments.sort(function (a, b) {
                   return new Date(b.date_time) - new Date(a.date_time);
                 });
               }
@@ -183,16 +185,23 @@ router.get("/:id", verifyToken, function _callee4(request, response) {
 
         case 4:
           photo = _context4.sent;
+
+          if (photo.comments.length > 0) {
+            photo.comments.sort(function (a, b) {
+              return new Date(b.date_time) - new Date(a.date_time);
+            });
+          }
+
           response.status(200).json({
             code: 200,
             message: "Truy vấn thành công",
             data: photo
           });
-          _context4.next = 12;
+          _context4.next = 13;
           break;
 
-        case 8:
-          _context4.prev = 8;
+        case 9:
+          _context4.prev = 9;
           _context4.t0 = _context4["catch"](0);
           console.error(_context4.t0);
           response.status(400).json({
@@ -200,11 +209,11 @@ router.get("/:id", verifyToken, function _callee4(request, response) {
             message: "Lỗi id không hợp lệ"
           });
 
-        case 12:
+        case 13:
         case "end":
           return _context4.stop();
       }
     }
-  }, null, null, [[0, 8]]);
+  }, null, null, [[0, 9]]);
 });
 module.exports = router;

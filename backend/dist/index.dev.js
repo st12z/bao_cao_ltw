@@ -29,7 +29,7 @@ app.get("/", function (request, response) {
     message: "Hello from photo-sharing app API!"
   });
 });
-app.use('/images', express["static"](path.join(__dirname, '../FrontEnd_LTW/src/images')));
+app.use("/images", express["static"](path.join(__dirname, "public/images")));
 app.listen(8081, function () {
   console.log("server listening on port 8081");
 });

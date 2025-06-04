@@ -153,22 +153,23 @@ router.get("/commentsOfUser/:id", verifyToken, function _callee2(request, respon
         case 0:
           _context2.prev = 0;
           id = request.params.id;
-          _context2.next = 4;
+          console.log(id);
+          _context2.next = 5;
           return regeneratorRuntime.awrap(Photo.find());
 
-        case 4:
+        case 5:
           photos = _context2.sent;
           amount = 0;
           data = [];
           _iteratorNormalCompletion3 = true;
           _didIteratorError3 = false;
           _iteratorError3 = undefined;
-          _context2.prev = 10;
+          _context2.prev = 11;
           _iterator3 = photos[Symbol.iterator]();
 
-        case 12:
+        case 13:
           if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-            _context2.next = 36;
+            _context2.next = 37;
             break;
           }
 
@@ -176,7 +177,7 @@ router.get("/commentsOfUser/:id", verifyToken, function _callee2(request, respon
           _iteratorNormalCompletion4 = true;
           _didIteratorError4 = false;
           _iteratorError4 = undefined;
-          _context2.prev = 17;
+          _context2.prev = 18;
 
           for (_iterator4 = photo.comments[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             comment = _step4.value;
@@ -186,110 +187,111 @@ router.get("/commentsOfUser/:id", verifyToken, function _callee2(request, respon
                 _id: comment._id,
                 photo_id: photo._id,
                 file_name: photo.file_name,
+                date_time: comment.date_time,
                 comment: comment.comment
               });
             }
           }
 
-          _context2.next = 25;
+          _context2.next = 26;
           break;
 
-        case 21:
-          _context2.prev = 21;
-          _context2.t0 = _context2["catch"](17);
+        case 22:
+          _context2.prev = 22;
+          _context2.t0 = _context2["catch"](18);
           _didIteratorError4 = true;
           _iteratorError4 = _context2.t0;
 
-        case 25:
-          _context2.prev = 25;
+        case 26:
           _context2.prev = 26;
+          _context2.prev = 27;
 
           if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
             _iterator4["return"]();
           }
 
-        case 28:
-          _context2.prev = 28;
+        case 29:
+          _context2.prev = 29;
 
           if (!_didIteratorError4) {
-            _context2.next = 31;
+            _context2.next = 32;
             break;
           }
 
           throw _iteratorError4;
 
-        case 31:
-          return _context2.finish(28);
-
         case 32:
-          return _context2.finish(25);
+          return _context2.finish(29);
 
         case 33:
+          return _context2.finish(26);
+
+        case 34:
           _iteratorNormalCompletion3 = true;
-          _context2.next = 12;
+          _context2.next = 13;
           break;
 
-        case 36:
-          _context2.next = 42;
+        case 37:
+          _context2.next = 43;
           break;
 
-        case 38:
-          _context2.prev = 38;
-          _context2.t1 = _context2["catch"](10);
+        case 39:
+          _context2.prev = 39;
+          _context2.t1 = _context2["catch"](11);
           _didIteratorError3 = true;
           _iteratorError3 = _context2.t1;
 
-        case 42:
-          _context2.prev = 42;
+        case 43:
           _context2.prev = 43;
+          _context2.prev = 44;
 
           if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
             _iterator3["return"]();
           }
 
-        case 45:
-          _context2.prev = 45;
+        case 46:
+          _context2.prev = 46;
 
           if (!_didIteratorError3) {
-            _context2.next = 48;
+            _context2.next = 49;
             break;
           }
 
           throw _iteratorError3;
 
-        case 48:
-          return _context2.finish(45);
-
         case 49:
-          return _context2.finish(42);
+          return _context2.finish(46);
 
         case 50:
+          return _context2.finish(43);
+
+        case 51:
           data.sort(function (a, b) {
-            return new Date(b.comment.date_time) - new Date(a.comment.date_time);
+            return new Date(b.date_time) - new Date(a.date_time);
           });
           response.status(200).json({
             code: 200,
             message: "Truy vấn thành công",
             data: data
           });
-          _context2.next = 58;
+          _context2.next = 59;
           break;
 
-        case 54:
-          _context2.prev = 54;
+        case 55:
+          _context2.prev = 55;
           _context2.t2 = _context2["catch"](0);
           console.error(_context2.t2);
           response.status(400).json({
-            code: 400,
-            message: "Lỗi id không hợp lệ"
+            code: 500,
+            message: "Lỗi server"
           });
 
-        case 58:
+        case 59:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 54], [10, 38, 42, 50], [17, 21, 25, 33], [26,, 28, 32], [43,, 45, 49]]);
+  }, null, null, [[0, 55], [11, 39, 43, 51], [18, 22, 26, 34], [27,, 29, 33], [44,, 46, 50]]);
 }); // thêm bình luận vào ảnh
 
 router.post("/commentsOfPhoto/:photo_id", verifyToken, function _callee3(request, response) {
@@ -339,11 +341,12 @@ router.post("/commentsOfPhoto/:photo_id", verifyToken, function _callee3(request
             comment: comment,
             date_time: new Date()
           });
-          _context3.next = 14;
+          console.log(photo);
+          _context3.next = 15;
           return regeneratorRuntime.awrap(photo.save());
 
-        case 14:
-          photo.comments = photo.comments.sort(function (a, b) {
+        case 15:
+          photo.comments.sort(function (a, b) {
             return new Date(b.date_time) - new Date(a.date_time);
           });
           response.status(200).json({
@@ -351,11 +354,11 @@ router.post("/commentsOfPhoto/:photo_id", verifyToken, function _callee3(request
             message: "Bình luận đã được thêm thành công",
             data: photo
           });
-          _context3.next = 22;
+          _context3.next = 23;
           break;
 
-        case 18:
-          _context3.prev = 18;
+        case 19:
+          _context3.prev = 19;
           _context3.t0 = _context3["catch"](0);
           console.error(_context3.t0);
           response.status(500).json({
@@ -363,11 +366,11 @@ router.post("/commentsOfPhoto/:photo_id", verifyToken, function _callee3(request
             message: "Lỗi server"
           });
 
-        case 22:
+        case 23:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 18]]);
+  }, null, null, [[0, 19]]);
 });
 module.exports = router;

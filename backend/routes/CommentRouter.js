@@ -34,6 +34,7 @@ router.get(
 router.get("/commentsOfUser/:id", verifyToken, async (request, response) => {
   try {
     const id = request.params.id;
+    console.log(id);
     const photos = await Photo.find();
     let amount = 0;
     const data = [];
@@ -44,13 +45,14 @@ router.get("/commentsOfUser/:id", verifyToken, async (request, response) => {
             _id: comment._id,
             photo_id: photo._id,
             file_name: photo.file_name,
+            date_time: comment.date_time,
             comment: comment.comment,
           });
         }
       }
     }
     data.sort((a, b) => {
-      return new Date(b.comment.date_time) - new Date(a.comment.date_time);
+      return new Date(b.date_time) - new Date(a.date_time);
     });
     response.status(200).json({
       code: 200,
@@ -60,8 +62,8 @@ router.get("/commentsOfUser/:id", verifyToken, async (request, response) => {
   } catch (error) {
     console.error(error);
     response.status(400).json({
-      code: 400,
-      message: "Lỗi id không hợp lệ",
+      code: 500,
+      message: "Lỗi server",
     });
   }
 });
@@ -93,8 +95,9 @@ router.post(
         comment: comment,
         date_time: new Date(),
       });
+      console.log(photo);
       await photo.save();
-      photo.comments = photo.comments.sort((a, b) => {
+      photo.comments.sort((a, b) => {
         return new Date(b.date_time) - new Date(a.date_time);
       });
 

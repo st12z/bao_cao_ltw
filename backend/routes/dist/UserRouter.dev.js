@@ -13,8 +13,7 @@ var dotenv = require("dotenv");
 var verifyToken = require("../middlewares/index");
 
 dotenv.config();
-var secretKey = process.env.SECRET_KEY; // Đăng kí người dùng post /api/user
-
+var secretKey = process.env.SECRET_KEY;
 router.post("", function _callee(request, response) {
   var existUser, _request$body, first_name, last_name, location, description, occupation, username, password, newUser, userResponse;
 
@@ -90,31 +89,68 @@ router.post("", function _callee(request, response) {
     }
   }, null, null, [[0, 15]]);
 });
-router.post("/login", function _callee2(request, response) {
-  var _request$body2, username, password, user;
-
+router.get("/list", verifyToken, function _callee2(request, response) {
+  var users;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          _request$body2 = request.body, username = _request$body2.username, password = _request$body2.password;
-          _context2.prev = 1;
+          _context2.prev = 0;
+          console.log("request.query", request.query);
           _context2.next = 4;
+          return regeneratorRuntime.awrap(User.find().select("_id first_name last_name"));
+
+        case 4:
+          users = _context2.sent;
+          response.status(200).json({
+            code: 200,
+            message: "Truy vấn thành công",
+            data: users
+          });
+          _context2.next = 12;
+          break;
+
+        case 8:
+          _context2.prev = 8;
+          _context2.t0 = _context2["catch"](0);
+          console.error(_context2.t0);
+          response.status(500).json({
+            code: 500,
+            message: "Lỗi truy vấn danh sách người dùng"
+          });
+
+        case 12:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 8]]);
+});
+router.post("/login", function _callee3(request, response) {
+  var _request$body2, username, password, user;
+
+  return regeneratorRuntime.async(function _callee3$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _request$body2 = request.body, username = _request$body2.username, password = _request$body2.password;
+          _context3.prev = 1;
+          _context3.next = 4;
           return regeneratorRuntime.awrap(User.findOne({
             username: username,
             password: password
           }).select("_id first_name last_name location description occupation"));
 
         case 4:
-          user = _context2.sent;
+          user = _context3.sent;
           console.log("user", user);
 
           if (user) {
-            _context2.next = 8;
+            _context3.next = 8;
             break;
           }
 
-          return _context2.abrupt("return", response.status(400).json({
+          return _context3.abrupt("return", response.status(400).json({
             code: 400,
             message: "Tài khoản hoặc mật khẩu không đúng"
           }));
@@ -142,13 +178,13 @@ router.post("/login", function _callee2(request, response) {
               }
             });
           });
-          _context2.next = 15;
+          _context3.next = 15;
           break;
 
         case 11:
-          _context2.prev = 11;
-          _context2.t0 = _context2["catch"](1);
-          console.error(_context2.t0);
+          _context3.prev = 11;
+          _context3.t0 = _context3["catch"](1);
+          console.error(_context3.t0);
           response.status(500).json({
             code: 500,
             message: "Lỗi đăng nhập"
@@ -156,47 +192,10 @@ router.post("/login", function _callee2(request, response) {
 
         case 15:
         case "end":
-          return _context2.stop();
-      }
-    }
-  }, null, null, [[1, 11]]);
-});
-router.get("/list", verifyToken, function _callee3(request, response) {
-  var users;
-  return regeneratorRuntime.async(function _callee3$(_context3) {
-    while (1) {
-      switch (_context3.prev = _context3.next) {
-        case 0:
-          _context3.prev = 0;
-          console.log("request.query", request.query);
-          _context3.next = 4;
-          return regeneratorRuntime.awrap(User.find().select("_id first_name last_name"));
-
-        case 4:
-          users = _context3.sent;
-          response.status(200).json({
-            code: 200,
-            message: "Truy vấn thành công",
-            data: users
-          });
-          _context3.next = 12;
-          break;
-
-        case 8:
-          _context3.prev = 8;
-          _context3.t0 = _context3["catch"](0);
-          console.error(_context3.t0);
-          response.status(500).json({
-            code: 500,
-            message: "Lỗi truy vấn danh sách người dùng"
-          });
-
-        case 12:
-        case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 8]]);
+  }, null, null, [[1, 11]]);
 });
 router.get("/:id", verifyToken, function _callee4(request, response) {
   var id, users;
